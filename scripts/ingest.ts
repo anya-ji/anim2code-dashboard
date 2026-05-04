@@ -71,6 +71,7 @@ async function ingestFolder(
   const metadataPath = path.join(folderPath, "metadata.json");
   const htmlPath = path.join(folderPath, "src", "index.html");
   const cssPath = path.join(folderPath, "src", "style.css");
+  const jsPath = path.join(folderPath, "src", "script.js");
   const videoPath = path.join(folderPath, "animation.mp4");
 
   if (!fs.existsSync(metadataPath) || !fs.existsSync(videoPath)) {
@@ -81,6 +82,7 @@ async function ingestFolder(
   const metadata = JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
   const html = fs.existsSync(htmlPath) ? fs.readFileSync(htmlPath, "utf-8") : "";
   const css = fs.existsSync(cssPath) ? fs.readFileSync(cssPath, "utf-8") : "";
+  const js = fs.existsSync(jsPath) ? fs.readFileSync(jsPath, "utf-8") : undefined;
 
   const manifestEntry = manifestMap.get(folder);
   const animationType = manifestEntry?.animationType ?? detectAnimationType(folderPath, html);
@@ -97,7 +99,7 @@ async function ingestFolder(
     videoUrl = await uploadVideo(videoPath, storagePath);
   }
 
-  await docRef.set({
+  const doc: Record<string, unknown> = {
     title: metadata.title ?? folder,
     url: metadata.url ?? "",
     animationType,
@@ -105,7 +107,10 @@ async function ingestFolder(
     videoUrl,
     html,
     css,
-  });
+  };
+  if (js !== undefined) doc.js = js;
+
+  await docRef.set(doc);
 
   console.log(`[${index}/${total}] DONE ${folder} — "${metadata.title}"`);
 }

@@ -7,4 +7,5 @@ export interface Animation {
   videoUrl: string;
   html?: string;
   css?: string;
+  js?: string;
 }

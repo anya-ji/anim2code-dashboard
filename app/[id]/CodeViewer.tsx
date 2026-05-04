@@ -4,13 +4,32 @@ import { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-export function CodeViewer({ html, css }: { html?: string; css?: string }) {
-  const [tab, setTab] = useState<"html" | "css">("html");
+type Tab = "html" | "css" | "js";
+
+export function CodeViewer({
+  html,
+  css,
+  js,
+}: {
+  html?: string;
+  css?: string;
+  js?: string;
+}) {
+  const tabs: Tab[] = [
+    ...(html ? (["html"] as Tab[]) : []),
+    ...(css ? (["css"] as Tab[]) : []),
+    ...(js ? (["js"] as Tab[]) : []),
+  ];
+
+  const [tab, setTab] = useState<Tab>(tabs[0] ?? "html");
+
+  const content = tab === "html" ? html : tab === "css" ? css : js;
+  const language = tab === "js" ? "javascript" : tab;
 
   return (
     <div className="flex flex-col h-full bg-white">
       <div className="flex border-b border-zinc-200">
-        {(["html", "css"] as const).map((t) => (
+        {tabs.map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -26,7 +45,7 @@ export function CodeViewer({ html, css }: { html?: string; css?: string }) {
       </div>
       <div className="flex-1 overflow-auto">
         <SyntaxHighlighter
-          language={tab}
+          language={language}
           style={oneLight}
           customStyle={{
             margin: 0,
@@ -38,7 +57,7 @@ export function CodeViewer({ html, css }: { html?: string; css?: string }) {
           showLineNumbers
           lineNumberStyle={{ color: "#d4d4d8", minWidth: "2.5em" }}
         >
-          {(tab === "html" ? html : css) ?? ""}
+          {content ?? ""}
         </SyntaxHighlighter>
       </div>
     </div>

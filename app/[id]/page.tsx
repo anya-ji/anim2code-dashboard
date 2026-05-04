@@ -77,7 +77,7 @@ export default async function AnimationPage({
 
       {/* Right: code viewer */}
       <div className="flex-1 overflow-hidden">
-        <CodeViewer html={anim.html} css={anim.css} />
+        <CodeViewer html={anim.html} css={anim.css} js={anim.js} />
       </div>
     </div>
   );
