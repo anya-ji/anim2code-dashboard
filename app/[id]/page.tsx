@@ -30,16 +30,19 @@ export default async function AnimationPage({
           ← back
         </Link>
 
-        <div className="aspect-[4/3] bg-zinc-100 rounded overflow-hidden border border-zinc-200">
-          <video
-            src={anim.videoUrl}
-            controls
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-contain"
-          />
+        <div>
+          <p className="text-[10px] text-zinc-400 uppercase tracking-wider mb-1">rendered animation</p>
+          <div className="aspect-[4/3] bg-zinc-100 rounded overflow-hidden border border-zinc-200">
+            <video
+              src={anim.videoUrl}
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-contain"
+            />
+          </div>
         </div>
 
         <div>
@@ -68,7 +71,7 @@ export default async function AnimationPage({
                 rel="noopener noreferrer"
                 className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors"
               >
-                CodePen ↗
+                source ↗
               </a>
             )}
           </div>

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { adminDb } from "@/lib/firebase-admin";
 import { FieldPath } from "firebase-admin/firestore";
+import { PageJumper } from "./PageJumper";
 
-const PAGE_SIZE = 48;
+const PAGE_SIZE = 15;
 
 type AnimationSummary = {
   id: string;
@@ -49,10 +50,22 @@ export default async function Home({
 
   return (
     <div className="px-6 py-6">
-      {/* Count */}
-      <p className="text-xs text-zinc-400 mb-4">
-        {start}–{end} of {total}
-      </p>
+      {/* Count + legend */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-xs text-zinc-400">
+          {start}–{end} of {total}
+        </p>
+        <div className="flex items-center gap-3 text-[10px] text-zinc-500">
+          <span className="flex items-center gap-1.5">
+            <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded uppercase font-medium">css</span>
+            CSS-based animation
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded uppercase font-medium">js</span>
+            JS-based animation
+          </span>
+        </div>
+      </div>
 
       {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -96,7 +109,7 @@ export default async function Home({
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-center gap-4 mt-10">
+      <div className="flex items-center justify-center gap-3 mt-10">
         {page > 1 ? (
           <Link
             href={`/?page=${page - 1}`}
@@ -112,6 +125,7 @@ export default async function Home({
         <span className="text-xs text-zinc-500">
           {page} / {totalPages}
         </span>
+        <PageJumper totalPages={totalPages} />
         {page < totalPages ? (
           <Link
             href={`/?page=${page + 1}`}
